@@ -1,0 +1,61 @@
+<!-- Single Article - ABQ Green & Blue palette -->
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+        <td>
+            <!-- Title with relevancy indicator -->
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <!-- Relevancy dot -->
+                    <td width="10" valign="top" style="padding-right: 8px; padding-top: 5px;">
+                        <span style="display: inline-block; width: 8px; height: 8px; border-radius: 50%; background-color: {{ article | relevancy_color }};"></span>
+                    </td>
+                    <!-- Title -->
+                    <td>
+                        <a href="{{ article.url }}" style="font-family: Arial, sans-serif; font-size: 15px; font-weight: bold; color: #0072BC; text-decoration: none; line-height: 1.4;">
+                            {{ article.title }}
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="padding-left: 18px;">
+            <!-- Source and date -->
+            <p style="font-family: Arial, sans-serif; font-size: 11px; color: #616161; margin: 5px 0;">
+                {{ article.source_name }}
+                {% if article.published %}
+                 | {{ article.published | format_date('%d %b %Y') }}
+                {% endif %}
+                {% if article.language %}
+                 | <span style="text-transform: uppercase;">{{ article.language }}</span>
+                {% endif %}
+            </p>
+
+            <!-- AI Summary or regular summary -->
+            {% if article.ai_summary %}
+            <p style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #424242; margin: 8px 0;">
+                {{ article.ai_summary | truncate_html(250) }}
+            </p>
+            {% elif article.summary %}
+            <p style="font-family: Arial, sans-serif; font-size: 13px; line-height: 1.5; color: #424242; margin: 8px 0;">
+                {{ article.summary | strip_html | truncate_html(200) }}
+            </p>
+            {% endif %}
+
+            <!-- Scientific Impact (if available) -->
+            {% if article.scientific_impact %}
+            <p style="font-family: Arial, sans-serif; font-size: 12px; line-height: 1.4; color: #5A9C1A; margin: 5px 0; font-style: italic;">
+                <strong>Impact scientifique:</strong> {{ article.scientific_impact }}
+            </p>
+            {% endif %}
+
+            <!-- Keywords matched -->
+            {% if article.keywords_matched %}
+            <p style="font-family: Arial, sans-serif; font-size: 10px; color: #888; margin: 5px 0 0 0;">
+                Mots-cles: {{ article.keywords_matched[:5] | join(', ') }}{% if article.keywords_matched | length > 5 %}...{% endif %}
+            </p>
+            {% endif %}
+        </td>
+    </tr>
+</table>

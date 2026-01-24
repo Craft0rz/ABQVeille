@@ -1,0 +1,773 @@
+{
+  "feeds": [
+    {
+      "name": "Radio-Canada Sciences",
+      "url": "https://ici.radio-canada.ca/rss/4159",
+      "category": "general",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Le Devoir - Environnement",
+      "url": "https://www.ledevoir.com/rss/section/actualites/environnement.xml",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Le Devoir - Science",
+      "url": "https://www.ledevoir.com/rss/section/actualites/science.xml",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "La Presse - Environnement",
+      "url": "https://www.lapresse.ca/actualites/environnement/rss",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Agence Science-Presse",
+      "url": "https://www.sciencepresse.qc.ca/rss.xml",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "UdeMNouvelles - Sciences",
+      "url": "https://nouvelles.umontreal.ca/rss/sciences",
+      "category": "research",
+      "enabled": false,
+      "priority": 1,
+      "language": "fr",
+      "_note": "RSS feed not available - disabled"
+    },
+    {
+      "name": "Universite Laval Actualites",
+      "url": "https://www.ulaval.ca/notre-universite/medias/fil-de-presse/rss.xml",
+      "category": "research",
+      "enabled": false,
+      "priority": 1,
+      "language": "fr",
+      "_note": "RSS feed not available - disabled"
+    },
+    {
+      "name": "INRS Actualites",
+      "url": "https://inrs.ca/feed/",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "CBC News - Technology & Science",
+      "url": "https://www.cbc.ca/webfeed/rss/rss-technology",
+      "category": "general",
+      "enabled": true,
+      "priority": 2,
+      "language": "en"
+    },
+    {
+      "name": "Environment and Climate Change Canada",
+      "url": "https://www.canada.ca/en/environment-climate-change.atom.xml",
+      "category": "regulatory",
+      "enabled": false,
+      "priority": 1,
+      "language": "en",
+      "_note": "Atom feed has parsing errors - disabled"
+    },
+    {
+      "name": "Google News - MELCCFP Quebec",
+      "url": "https://news.google.com/rss/search?q=MELCCFP+OR+%22minist%C3%A8re+environnement%22+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "regulatory",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Environnement Changement climatique Canada",
+      "url": "https://news.google.com/rss/search?q=%22Environnement+et+Changement+climatique+Canada%22&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "regulatory",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Loi environnement Quebec",
+      "url": "https://news.google.com/rss/search?q=loi+environnement+Quebec+OR+r%C3%A8glement&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "regulatory",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Politique environnementale Quebec",
+      "url": "https://news.google.com/rss/search?q=politique+environnementale+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "regulatory",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Changement climatique Quebec",
+      "url": "https://news.google.com/rss/search?q=changement+climatique+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Biodiversite Quebec",
+      "url": "https://news.google.com/rss/search?q=biodiversit%C3%A9+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Conservation Quebec",
+      "url": "https://news.google.com/rss/search?q=conservation+nature+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Pollution environnement Quebec",
+      "url": "https://news.google.com/rss/search?q=pollution+environnement+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Etude impact environnemental Quebec",
+      "url": "https://news.google.com/rss/search?q=%C3%A9tude+impact+environnemental+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Developpement durable Quebec",
+      "url": "https://news.google.com/rss/search?q=d%C3%A9veloppement+durable+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Milieux humides Quebec",
+      "url": "https://news.google.com/rss/search?q=milieux+humides+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Habitat faunique Quebec",
+      "url": "https://news.google.com/rss/search?q=habitat+faunique+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Especes en peril Quebec",
+      "url": "https://news.google.com/rss/search?q=esp%C3%A8ces+en+p%C3%A9ril+Quebec+OR+esp%C3%A8ces+menac%C3%A9es&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Inventaire faunique floristique",
+      "url": "https://news.google.com/rss/search?q=inventaire+faunique+OR+inventaire+floristique+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Caracterisation ecologique",
+      "url": "https://news.google.com/rss/search?q=caract%C3%A9risation+%C3%A9cologique+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Cours d'eau Quebec",
+      "url": "https://news.google.com/rss/search?q=cours+d%27eau+Quebec+protection&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Consultation environnementale Quebec",
+      "url": "https://news.google.com/rss/search?q=consultation+environnementale+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "general",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Biologiste emploi Quebec",
+      "url": "https://news.google.com/rss/search?q=biologiste+emploi+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "general",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Foret Quebec",
+      "url": "https://news.google.com/rss/search?q=for%C3%AAt+Quebec+foresterie&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Faune parcs Quebec",
+      "url": "https://news.google.com/rss/search?q=faune+parcs+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Aquaculture pecheries Quebec",
+      "url": "https://news.google.com/rss/search?q=aquaculture+OR+p%C3%AAcheries+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Gestion ressources naturelles Quebec",
+      "url": "https://news.google.com/rss/search?q=gestion+ressources+naturelles+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Biotechnologie Quebec",
+      "url": "https://news.google.com/rss/search?q=biotechnologie+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Agroalimentaire Quebec",
+      "url": "https://news.google.com/rss/search?q=agroalimentaire+recherche+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Sciences biomedicales Quebec",
+      "url": "https://news.google.com/rss/search?q=sciences+biom%C3%A9dicales+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Recherche biologie Quebec",
+      "url": "https://news.google.com/rss/search?q=recherche+biologie+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Recherche environnement Quebec",
+      "url": "https://news.google.com/rss/search?q=recherche+environnement+universit%C3%A9+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - CRSNG subvention",
+      "url": "https://news.google.com/rss/search?q=CRSNG+subvention+OR+NSERC&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - FRQ recherche Quebec",
+      "url": "https://news.google.com/rss/search?q=FRQ+recherche+Quebec+OR+FRQNT&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Fleuve Saint-Laurent",
+      "url": "https://news.google.com/rss/search?q=fleuve+Saint-Laurent&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Foret boreale Quebec",
+      "url": "https://news.google.com/rss/search?q=for%C3%AAt+bor%C3%A9ale+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 2,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Grands Lacs Canada",
+      "url": "https://news.google.com/rss/search?q=Grands+Lacs+environnement+Canada&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 2,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Conference scientifique Quebec",
+      "url": "https://news.google.com/rss/search?q=conf%C3%A9rence+scientifique+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "events",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Colloque environnement Quebec",
+      "url": "https://news.google.com/rss/search?q=colloque+environnement+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "events",
+      "enabled": true,
+      "priority": 2,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Nature Conservancy Canada Quebec",
+      "url": "https://news.google.com/rss/search?q=%22Conservation+de+la+nature+Canada%22+OR+%22Nature+Conservancy+Canada%22+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Canards Illimites Quebec",
+      "url": "https://news.google.com/rss/search?q=%22Canards+Illimit%C3%A9s%22+OR+%22Ducks+Unlimited%22+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - WWF Canada environnement",
+      "url": "https://news.google.com/rss/search?q=WWF+Canada+environnement+OR+%22World+Wildlife+Fund%22+Canada&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Nature Canada conservation",
+      "url": "https://news.google.com/rss/search?q=%22Nature+Canada%22+conservation+OR+faune&hl=en-CA&gl=CA&ceid=CA:en",
+      "category": "environment",
+      "enabled": true,
+      "priority": 2,
+      "language": "en"
+    },
+    {
+      "name": "Canadian Wildlife Federation Blog",
+      "url": "https://blog.cwf-fcf.org/index.php/en/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 2,
+      "language": "en"
+    },
+    {
+      "name": "Google News - BAPE Quebec consultations",
+      "url": "https://news.google.com/rss/search?q=BAPE+Quebec+OR+%22audiences+publiques+environnement%22&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "regulatory",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - COSEWIC especes peril",
+      "url": "https://news.google.com/rss/search?q=COSEPAC+OR+COSEWIC+esp%C3%A8ces&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "regulatory",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Natural Resources Canada RSS",
+      "url": "https://natural-resources.canada.ca/api/rss/en/news",
+      "category": "regulatory",
+      "enabled": true,
+      "priority": 2,
+      "language": "en"
+    },
+    {
+      "name": "Google News - QCBS biodiversite Quebec",
+      "url": "https://news.google.com/rss/search?q=%22Centre+de+la+science+de+la+biodiversit%C3%A9%22+OR+QCBS+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - McGill recherche environnement",
+      "url": "https://news.google.com/rss/search?q=McGill+recherche+environnement+OR+%C3%A9cologie&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 2,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Centre recherche foret CEF",
+      "url": "https://news.google.com/rss/search?q=%22Centre+de+recherche+sur+la+for%C3%AAt%22+OR+CEF+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 2,
+      "language": "fr"
+    },
+    {
+      "name": "PLOS ONE - Ecology",
+      "url": "https://journals.plos.org/plosone/feed/atom?filterSubjects=Ecology&filterStartDate=2025-01-01",
+      "category": "research",
+      "enabled": true,
+      "priority": 3,
+      "language": "en"
+    },
+    {
+      "name": "PLOS Biology",
+      "url": "https://journals.plos.org/plosbiology/feed/atom",
+      "category": "research",
+      "enabled": true,
+      "priority": 3,
+      "language": "en"
+    },
+    {
+      "name": "Google News - Greenpeace Quebec environnement",
+      "url": "https://news.google.com/rss/search?q=Greenpeace+Quebec+environnement&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Equiterre Quebec",
+      "url": "https://news.google.com/rss/search?q=%C3%89quiterre+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Fondation David Suzuki Quebec",
+      "url": "https://news.google.com/rss/search?q=%22David+Suzuki%22+Quebec+environnement&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "environment",
+      "enabled": true,
+      "priority": 2,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Scientifique en chef Quebec",
+      "url": "https://news.google.com/rss/search?q=%22scientifique+en+chef%22+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "research",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Association biologistes Quebec ABQ",
+      "url": "https://news.google.com/rss/search?q=%22Association+des+biologistes%22+Quebec+OR+ABQ+biologiste&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "general",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Google News - Ordre professionnel biologistes Quebec",
+      "url": "https://news.google.com/rss/search?q=ordre+professionnel+biologistes+Quebec&hl=fr-CA&gl=CA&ceid=CA:fr",
+      "category": "general",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "CRE Laurentides",
+      "url": "https://crelaurentides.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "CRE Chaudiere-Appalaches",
+      "url": "https://creca.qc.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "CRE Gaspesie",
+      "url": "https://cregaspesie.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "ROBVQ",
+      "url": "https://robvq.qc.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "OBV de la Capitale",
+      "url": "https://www.obvcapitale.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "OBV Riviere du Nord",
+      "url": "https://www.obvrdn.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "OBVRPNS",
+      "url": "https://www.rpns.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "OBV Temiscamingue",
+      "url": "https://obvt.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "OBV L'Assomption",
+      "url": "https://obvlassomption.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "ABV des 7",
+      "url": "https://abv7.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "COBAMIL",
+      "url": "https://cobamil.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "OBV Saguenay",
+      "url": "https://www.obvsaguenay.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "OBV Lac-Saint-Jean",
+      "url": "https://www.obvlacstjean.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "OBV Yamaska",
+      "url": "https://obv-yamaska.qc.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "SCABRIC",
+      "url": "https://scabric.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "COBALI",
+      "url": "https://www.cobali.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Comite ZIP du lac Saint-Pierre",
+      "url": "https://comiteziplsp.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "ZIP Haut Saint-Laurent",
+      "url": "https://ziphsl.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "ZIP Saguenay-Charlevoix",
+      "url": "https://zipsaguenaycharlevoix.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "ZIP Sud-de-l'Estuaire",
+      "url": "https://www.zipsud.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "ZIP Gaspesie",
+      "url": "https://zipgaspesie.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Corridor appalachien",
+      "url": "https://corridorappalachien.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Eco-Corridors Laurentiens",
+      "url": "https://ecocorridorslaurentiens.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Nature-Action Quebec",
+      "url": "https://nature-action.qc.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Fiducie conservation ecosystemes Lanaudiere",
+      "url": "https://fcelanaudiere.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Conservation de la nature Canada",
+      "url": "https://www.natureconservancy.ca/fr/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "Nature Quebec",
+      "url": "https://naturequebec.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "SNAP Quebec",
+      "url": "https://snapquebec.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "RNCREQ",
+      "url": "https://rncreq.org/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "COVABAR",
+      "url": "https://covabar.qc.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    },
+    {
+      "name": "CRECQ",
+      "url": "https://crecq.qc.ca/feed/",
+      "category": "environment",
+      "enabled": true,
+      "priority": 1,
+      "language": "fr"
+    }
+  ],
+  "_categories": {
+    "research": "Recherche scientifique, publications, decouvertes, universites, PLOS, QCBS, CEF",
+    "environment": "Ecologie, biodiversite, conservation, changement climatique, milieux humides, habitats fauniques, ONG environnementales",
+    "regulatory": "Reglementations environnementales, MELCCFP, ECCC, BAPE, COSEWIC, lois et politiques",
+    "events": "Conferences, congres, colloques, evenements scientifiques",
+    "general": "Actualites generales, emplois, profession biologiste, ABQ"
+  },
+  "_feed_count": "92 feeds (89 enabled)",
+  "_notes": {
+    "cre": "3 Conseils regionaux de l'environnement",
+    "obv": "13 Organismes de bassins versants",
+    "zip": "5 Zones d'intervention prioritaires (Saint-Laurent)",
+    "conservation": "10 Organismes de conservation et connectivite ecologique (IQCE et autres)"
+  }
+}

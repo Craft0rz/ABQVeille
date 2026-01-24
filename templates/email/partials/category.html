@@ -1,0 +1,23 @@
+<!-- Category Section - ABQ Green & Blue palette -->
+<table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom: 25px;">
+    <!-- Category Header -->
+    <tr>
+        <td style="padding: 10px 0; border-bottom: 2px solid #8CC63F;">
+            <h2 style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; color: #0072BC; margin: 0;">
+                {{ category.display_name }}
+            </h2>
+            <p style="font-family: Arial, sans-serif; font-size: 12px; color: #616161; margin: 5px 0 0 0;">
+                {{ category.articles | length }} article{% if category.articles | length > 1 %}s{% endif %}
+            </p>
+        </td>
+    </tr>
+
+    <!-- Articles in category -->
+    {% for article in category.articles %}
+    <tr>
+        <td style="padding: 15px 0; border-bottom: 1px solid #e0e0e0;">
+            {% include 'partials/article.html' %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>

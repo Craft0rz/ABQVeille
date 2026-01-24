@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+.venv/
+ENV/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Environment
+.env
+.env.local
+
+# Logs
+logs/*.log
+
+# Data (keep structure, ignore content)
+data/**/*.json
+data/**/*.md
+!data/.gitkeep
+
+# Credentials
+config/credentials.json
+config/token.json
+config/token.pickle
+credentials/*.json
+!credentials/.gitkeep
