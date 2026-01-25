@@ -203,20 +203,20 @@ class AIAnalyst:
             logger.info(f"Analyzing article {i}/{len(to_analyze)}: {article.title[:50]}...")
             analyzed.append(self.analyze_article(article))
 
-        # Filter out FAIBLE and AUCUN impact articles (keep ELEVE and MOYEN)
-        high_impact = []
+        # Filter out only AUCUN impact articles (keep ELEVE, MOYEN, and FAIBLE)
+        relevant_articles = []
         for article in analyzed:
-            if article.impact_level in ("eleve", "moyen"):
-                high_impact.append(article)
+            if article.impact_level in ("eleve", "moyen", "faible"):
+                relevant_articles.append(article)
             else:
                 self.stats["filtered_low_impact"] += 1
                 logger.info(f"Filtered ({article.impact_level}): {article.title[:50]}...")
 
         logger.info(f"AI Analysis complete: {self.stats}")
-        logger.info(f"Kept {len(high_impact)}/{len(analyzed)} articles with ELEVE/MOYEN impact")
+        logger.info(f"Kept {len(relevant_articles)}/{len(analyzed)} articles with ELEVE/MOYEN/FAIBLE impact")
 
-        # Only return high-impact analyzed articles
-        return high_impact
+        # Only return relevant analyzed articles (excludes AUCUN)
+        return relevant_articles
 
     def _parse_analysis(self, text: str) -> dict:
         """

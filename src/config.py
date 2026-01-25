@@ -68,8 +68,8 @@ class AnalysisConfig(BaseModel):
         # Academia - English
         "university", "grant", "scholarship", "publication", "peer review"
     ])
-    min_relevancy_score: float = 0.02  # Lower threshold to get 5-20 articles after AI filtering
-    max_articles_per_category: int = 10  # Increased for more coverage
+    min_relevancy_score: float = 0.015  # Very low threshold to get 8-25 articles after AI filtering
+    max_articles_per_category: int = 15  # Increased for better coverage
 
 
 class AIConfig(BaseModel):
