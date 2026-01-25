@@ -49,7 +49,7 @@ class AnalysisPipeline:
 
         self.extractor = ContentExtractor(delay=extraction_delay)
         self.scorer = RelevancyScorer()
-        self.deduplicator = ContentDeduplicator(similarity_threshold=0.40)
+        self.deduplicator = ContentDeduplicator(similarity_threshold=0.30)
 
         # AI components (only initialized if enabled)
         if self.enable_ai_analysis:
@@ -120,6 +120,11 @@ class AnalysisPipeline:
             logger.info(f"Running AI analysis on {len(relevant)} relevant articles")
             relevant = self.ai_analyst.analyze_batch(relevant)
             logger.info(f"AI analysis complete: {self.ai_analyst.get_stats()}")
+
+            # Stage 5b: Post-AI deduplication to catch any remaining duplicates
+            logger.info(f"Running post-AI deduplication on {len(relevant)} articles")
+            relevant = self.deduplicator.deduplicate(relevant)
+            logger.info(f"After post-AI dedup: {len(relevant)} unique articles, {self.deduplicator.get_stats()}")
 
             # Stage 6: Generate daily executive summary (skip in test mode)
             if self.summary_generator:

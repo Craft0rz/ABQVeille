@@ -28,7 +28,7 @@ STOP_WORDS = {
 class ContentDeduplicator:
     """Detects duplicate stories from different sources using title similarity"""
 
-    def __init__(self, similarity_threshold: float = 0.35):
+    def __init__(self, similarity_threshold: float = 0.30):
         """
         Initialize deduplicator.
 
