@@ -1,0 +1,177 @@
+{
+  "_description": "Liste prédéfinie de sites québécois pertinents pour biologistes",
+  "_usage": "Cette liste est scannée automatiquement par discover_sources.py",
+  "universities": [
+    {
+      "name": "Université de Montréal",
+      "domain": "nouvelles.umontreal.ca",
+      "sections": [
+        "https://nouvelles.umontreal.ca",
+        "https://nouvelles.umontreal.ca/sciences"
+      ]
+    },
+    {
+      "name": "UQAM",
+      "domain": "actualites.uqam.ca",
+      "sections": [
+        "https://actualites.uqam.ca",
+        "https://actualites.uqam.ca/recherche"
+      ]
+    },
+    {
+      "name": "Université Laval",
+      "domain": "www.ulaval.ca",
+      "sections": [
+        "https://www.ulaval.ca/notre-universite/medias/fil-de-presse"
+      ]
+    },
+    {
+      "name": "McGill University",
+      "domain": "www.mcgill.ca",
+      "sections": [
+        "https://www.mcgill.ca/newsroom",
+        "https://reporter.mcgill.ca"
+      ]
+    },
+    {
+      "name": "Concordia University",
+      "domain": "www.concordia.ca",
+      "sections": [
+        "https://www.concordia.ca/news.html"
+      ]
+    },
+    {
+      "name": "UQTR",
+      "domain": "www.uqtr.ca",
+      "sections": [
+        "https://www.uqtr.ca/nouvelles"
+      ]
+    },
+    {
+      "name": "UQAC",
+      "domain": "www.uqac.ca",
+      "sections": [
+        "https://www.uqac.ca/nouvelles"
+      ]
+    },
+    {
+      "name": "UQAR",
+      "domain": "www.uqar.ca",
+      "sections": [
+        "https://www.uqar.ca/nouvelles"
+      ]
+    },
+    {
+      "name": "UQO",
+      "domain": "uqo.ca",
+      "sections": [
+        "https://uqo.ca/nouvelles"
+      ]
+    },
+    {
+      "name": "INRS",
+      "domain": "inrs.ca",
+      "sections": [
+        "https://inrs.ca/actualites",
+        "https://inrs.ca/feed/"
+      ]
+    },
+    {
+      "name": "École Polytechnique",
+      "domain": "www.polymtl.ca",
+      "sections": [
+        "https://www.polymtl.ca/carrefour-actualite"
+      ]
+    },
+    {
+      "name": "HEC Montréal",
+      "domain": "www.hec.ca",
+      "sections": [
+        "https://www.hec.ca/nouvelles"
+      ]
+    },
+    {
+      "name": "ÉTS",
+      "domain": "www.etsmtl.ca",
+      "sections": [
+        "https://www.etsmtl.ca/nouvelles"
+      ]
+    }
+  ],
+  "research_centers": [
+    {
+      "name": "INSPQ",
+      "domain": "www.inspq.qc.ca",
+      "sections": [
+        "https://www.inspq.qc.ca"
+      ]
+    },
+    {
+      "name": "Centre de recherche du CHUM",
+      "domain": "www.chumontreal.qc.ca",
+      "sections": [
+        "https://www.chumontreal.qc.ca/crchum"
+      ]
+    },
+    {
+      "name": "Institut de recherche en biologie végétale",
+      "domain": "irbv.umontreal.ca",
+      "sections": [
+        "https://irbv.umontreal.ca"
+      ]
+    },
+    {
+      "name": "Centre de la science de la biodiversité du Québec",
+      "domain": "qcbs.ca",
+      "sections": [
+        "https://qcbs.ca"
+      ]
+    },
+    {
+      "name": "Centre d'étude de la forêt",
+      "domain": "www.cef-cfr.ca",
+      "sections": [
+        "https://www.cef-cfr.ca"
+      ]
+    }
+  ],
+  "government": [
+    {
+      "name": "MELCCFP",
+      "domain": "www.environnement.gouv.qc.ca",
+      "sections": [
+        "https://www.environnement.gouv.qc.ca"
+      ]
+    },
+    {
+      "name": "Ministère des Forêts, de la Faune et des Parcs",
+      "domain": "mffp.gouv.qc.ca",
+      "sections": [
+        "https://mffp.gouv.qc.ca"
+      ]
+    },
+    {
+      "name": "MAPAQ",
+      "domain": "www.mapaq.gouv.qc.ca",
+      "sections": [
+        "https://www.mapaq.gouv.qc.ca"
+      ]
+    }
+  ],
+  "media": [
+    {
+      "name": "Québec Science",
+      "domain": "www.quebecscience.qc.ca",
+      "sections": [
+        "https://www.quebecscience.qc.ca"
+      ]
+    },
+    {
+      "name": "L'actualité",
+      "domain": "lactualite.com",
+      "sections": [
+        "https://lactualite.com/sciences"
+      ]
+    }
+  ]
+}
