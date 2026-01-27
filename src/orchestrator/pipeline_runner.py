@@ -13,10 +13,11 @@ from loguru import logger
 import sys
 sys.path.insert(0, str(Path(__file__).parent.parent.parent.parent))
 
-from ABQ.src.config import DATA_DIR, LOGS_DIR
+from ABQ.src.config import DATA_DIR, LOGS_DIR, CONFIG_DIR
 from ABQ.src.collectors import fetch_all_rss
 from ABQ.src.models import ArticleModel
 from ABQ.src.utils import storage
+from ABQ.src.utils.feed_health import FeedHealthChecker, format_health_report
 from ABQ.src.analyzers import AnalysisPipeline
 from ABQ.src.generators import EmailPipeline
 from ABQ.src.delivery import gmail_sender, gmail_auth
@@ -112,6 +113,51 @@ class PipelineRunner:
                 self.lock_file.unlink()
         except Exception as e:
             logger.warning(f"Failed to remove lock file: {e}")
+
+    def _stage_health_check(self) -> Tuple[bool, dict]:
+        """Stage 0: Check feed health and apply automatic fixes."""
+        logger.info("=" * 60)
+        logger.info("STAGE 0: Feed Health Check")
+        logger.info("=" * 60)
+
+        try:
+            # Load feeds config
+            feeds_config_path = CONFIG_DIR / "feeds.json"
+            with open(feeds_config_path) as f:
+                config_data = json.load(f)
+                feeds = config_data.get("feeds", [])
+
+            # Run health check
+            checker = FeedHealthChecker(timeout=20)
+            report = checker.check_all_feeds(feeds)
+
+            # Log report
+            logger.info(format_health_report(report))
+
+            # Apply automatic fixes
+            if report["fixed"]:
+                fixes_applied = checker.apply_fixes(feeds_config_path, report)
+                logger.success(f"Applied {fixes_applied} automatic fixes")
+
+            # Log warnings for down feeds
+            if report["down"]:
+                logger.warning(f"{len(report['down'])} feeds are currently down")
+                for feed in report["down"]:
+                    logger.warning(f"  • {feed['name']}: {feed.get('issue', 'unknown')}")
+
+            if report["degraded"]:
+                logger.warning(f"{len(report['degraded'])} feeds are degraded")
+                for feed in report["degraded"]:
+                    logger.warning(f"  • {feed['name']}: {feed.get('issue', 'unknown')}")
+
+            logger.info("Feed health check complete")
+            return True, report
+
+        except Exception as e:
+            logger.exception(f"Feed health check failed: {e}")
+            # Don't fail the pipeline, continue with RSS fetch
+            logger.warning("Continuing with RSS fetch despite health check failure")
+            return False, {}
 
     def _stage_rss_fetch(self) -> Tuple[bool, int]:
         """Stage 1: Fetch RSS feeds."""
@@ -298,6 +344,9 @@ class PipelineRunner:
         try:
             # Acquire lock
             self._acquire_lock()
+
+            # Stage 0: Feed Health Check (non-blocking)
+            self._stage_health_check()
 
             # Stage 1: RSS Fetch
             success, count = self._stage_rss_fetch()
