@@ -413,7 +413,7 @@
     },
     {
       "name": "Natural Resources Canada RSS",
-      "url": "https://natural-resources.canada.ca/api/rss/en/news",
+      "url": "https://api.io.canada.ca/io-server/gc/news/en/v2?dept=naturalresourcescanada&sort=publishedDate&orderBy=desc&publishedDate%3E=2021-07-23&pick=50&format=atom&atomtitle=Natural%20Resources%20Canada",
       "category": "regulatory",
       "enabled": true,
       "priority": 2,
