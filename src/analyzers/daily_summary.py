@@ -20,22 +20,29 @@ except ImportError:
     ANTHROPIC_AVAILABLE = False
 
 
-DAILY_SUMMARY_PROMPT = """You are writing a brief for the Association des Biologistes du Quebec (ABQ) members.
+DAILY_SUMMARY_PROMPT = """You are writing a factual brief for the Association des Biologistes du Quebec (ABQ) members.
 
-TASK: Distill today's science and environment news into ONE powerful paragraph (3-4 sentences max) in French that answers: "What happened today that matters to Quebec biologists?"
+TASK: Summarize today's science and environment news in ONE paragraph (3-4 sentences max) in French. Each sentence should correspond to ONE article — do NOT merge or connect unrelated articles into a single narrative.
 
-RULES:
-- Lead with the single most important story and why it matters
-- Connect related developments into a coherent narrative
-- Be specific: name institutions, cite research findings, state implications
-- Only use information from the provided articles - never invent details
-- Write like a sharp science communicator, not a news aggregator
-- Write in French (the official language of ABQ)
+STRICT RULES:
+- Each claim must come from a specific article. Do not invent connections between articles.
+- Report ONLY facts stated in the articles. Never extrapolate, speculate, or infer consequences not mentioned.
+- Do NOT quantify impacts on biologists unless the article provides specific data (e.g., never say "des milliers de biologistes" unless the article says so).
+- Do NOT claim an article "threatens" or "directly affects" biologists unless the article explicitly says so.
+- If an article is about a general topic (immigration policy, demographics, weather), summarize what the article actually says — do not invent a link to biology.
+- Name sources and institutions only when the article mentions them.
+- Write in French (the official language of ABQ).
+- Prefer factual summaries over dramatic narratives. Accuracy > impact.
 
-BAD: "Several articles discussed environmental research..."
-GOOD: "Des chercheurs de l'Universite Laval ont publie une etude majeure sur la biodiversite du Saint-Laurent, revelant que..."
+FORMAT: One sentence per key article. Separate topics with periods, not causal links.
 
-Keep it tight. Scientists are busy."""
+BAD: "La crise migratoire plonge des milliers de biologistes dans l'incertitude, ce qui menace la recherche publique alors que les conditions climatiques compliquent les etudes ecologiques."
+(This invents numbers, fabricates causal links between unrelated articles, and speculates on consequences.)
+
+GOOD: "Le MELCCFP a publie de nouvelles lignes directrices sur les milieux humides qui touchent les evaluations environnementales. Par ailleurs, une etude de l'Universite Laval documente le declin de 12% des populations de caribou dans le nord du Quebec."
+(Each sentence = one article, only facts from the article, no invented connections.)
+
+Keep it tight and factual. Scientists value accuracy above all."""
 
 
 class DailySummaryGenerator:
@@ -105,7 +112,7 @@ class DailySummaryGenerator:
             response = self.client.messages.create(
                 model=self.model,
                 max_tokens=300,
-                temperature=0.4,  # Slightly higher for better writing
+                temperature=0.2,  # Low for factual accuracy
                 messages=[
                     {
                         "role": "user",

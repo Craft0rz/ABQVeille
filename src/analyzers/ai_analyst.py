@@ -54,24 +54,30 @@ INSTITUTIONS CLES:
 - Gouvernement: MELCCFP, MFFP, Environnement Canada, Parcs Canada
 - Financement: FRQ, CRSNG, Genome Quebec
 
-IMPORTANT: Resumez uniquement les informations EXPLICITEMENT mentionnees dans l'article. NE PAS inventer de details.
+REGLES STRICTES ANTI-FABRICATION:
+- Resumez UNIQUEMENT les informations EXPLICITEMENT mentionnees dans l'article.
+- NE PAS inventer de chiffres, statistiques ou donnees qui ne sont pas dans l'article.
+- NE PAS extrapoler l'impact sur les biologistes si l'article ne les mentionne pas directement.
+- NE PAS quantifier un groupe (ex: "des milliers de biologistes") sans source dans l'article.
+- Si l'article ne mentionne pas explicitement les biologistes ou leur domaine, dites simplement quel est le sujet de l'article et pourquoi il pourrait etre d'interet general, sans inventer un lien direct.
+- Preferer "cet article pourrait interesser les biologistes car..." plutot que "cela affecte directement les biologistes".
 
 Analysez cet article et repondez EXACTEMENT dans ce format (en francais):
 
 RESUME:
-[Resume en 2-3 phrases des faits et developpements cles]
+[Resume en 2-3 phrases des FAITS rapportes dans l'article. Aucune interpretation, aucun ajout.]
 
 IMPACT SCIENTIFIQUE:
-[Une breve phrase sur l'impact pour les biologistes du Quebec]
+[Si l'article mentionne explicitement les biologistes, l'ecologie ou un domaine connexe, decrivez le lien factuel. Sinon, indiquez simplement: "Article d'interet general pour la veille scientifique." NE PAS inventer de lien avec les biologistes qui n'existe pas dans l'article.]
 
 NIVEAU D'IMPACT:
 [Evaluez la pertinence pour les biologistes du Quebec. Choisissez EXACTEMENT UN mot:
-- ELEVE: Directement pertinent pour le Quebec - reglementation quebecoise/canadienne, especes/ecosystemes du Quebec/Canada, emplois pour biologistes au Quebec, universites quebecoises, politiques environnementales Quebec/Canada
-- MOYEN: Application pratique au Quebec - methodes/techniques applicables en consultation environnementale, recherche pertinente aux ecosystemes canadiens, enjeux environnementaux canadiens (changements climatiques, biodiversite, conservation), opportunites de financement canadien
-- FAIBLE: Recherche internationale generale - biologie fondamentale sans lien Quebec/Canada, especes/ecosystemes etrangers, methodes non applicables au contexte quebecois
+- ELEVE: L'article mentionne explicitement un sujet directement lie au travail des biologistes au Quebec/Canada (reglementation, especes/ecosystemes, emplois, universites, politiques environnementales)
+- MOYEN: L'article traite d'un sujet en lien avec la biologie/environnement au Canada sans mentionner directement les biologistes (methodes, recherche, enjeux climatiques, financement)
+- FAIBLE: Recherche internationale generale ou sujet peripherique - biologie fondamentale sans lien Quebec/Canada, especes/ecosystemes etrangers
 - AUCUN: Hors sujet - finance, sport, divertissement, technologie non-scientifique
 
-IMPORTANT: Privilegier le contenu Quebec/Canada. La recherche internationale generale (ex: genetique de souris, biologie vegetale generique) devrait etre FAIBLE sauf si directement applicable au Quebec.]
+IMPORTANT: Privilegier le contenu Quebec/Canada. La recherche internationale generale devrait etre FAIBLE sauf si directement applicable au Quebec.]
 
 CATEGORIE D'IMPACT:
 [Un de: recherche | politique | opportunite | environnement | carriere]"""

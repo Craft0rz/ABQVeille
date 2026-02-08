@@ -2,11 +2,13 @@
   "feeds": [
     {
       "name": "Radio-Canada Sciences",
-      "url": "https://ici.radio-canada.ca/rss/4159",
+      "url": "https://ici.radio-canada.ca/info/rss/info/a-la-une",
       "category": "general",
       "enabled": true,
       "priority": 1,
-      "language": "fr"
+      "language": "fr",
+      "_auto_fixed": "2026-01-28T07:03:15.588220",
+      "_old_url": "https://ici.radio-canada.ca/rss/4159"
     },
     {
       "name": "Le Devoir - Environnement",
