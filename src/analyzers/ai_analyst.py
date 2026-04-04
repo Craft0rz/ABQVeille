@@ -72,12 +72,20 @@ IMPACT SCIENTIFIQUE:
 
 NIVEAU D'IMPACT:
 [Evaluez la pertinence pour les biologistes du Quebec. Choisissez EXACTEMENT UN mot:
-- ELEVE: L'article mentionne explicitement un sujet directement lie au travail des biologistes au Quebec/Canada (reglementation, especes/ecosystemes, emplois, universites, politiques environnementales)
-- MOYEN: L'article traite d'un sujet en lien avec la biologie/environnement au Canada sans mentionner directement les biologistes (methodes, recherche, enjeux climatiques, financement)
+- ELEVE: L'article mentionne explicitement un sujet directement lie au travail des biologistes au Quebec/Canada (reglementation environnementale, especes/ecosystemes, emplois en biologie, recherche universitaire en sciences naturelles, politiques environnementales)
+- MOYEN: L'article traite d'un sujet en lien avec la biologie/environnement au Canada sans mentionner directement les biologistes (methodes scientifiques, recherche ecologique, enjeux climatiques mesurables, financement de la recherche scientifique)
 - FAIBLE: Recherche internationale generale ou sujet peripherique - biologie fondamentale sans lien Quebec/Canada, especes/ecosystemes etrangers
-- AUCUN: Hors sujet - finance, sport, divertissement, technologie non-scientifique
+- AUCUN: Hors sujet pour les biologistes. Ceci inclut:
+  * Meteo, previsions meteorologiques (meme si "Environnement Canada" est la source)
+  * Sport, divertissement, culture
+  * Politique generale, elections, relations internationales, defense militaire
+  * Finance, economie generale, bourse, tarifs douaniers
+  * Securite publique, criminalite, faits divers
+  * Agroalimentaire/alimentation SAUF si un aspect biologique/scientifique est central
+  * Sante publique generale SAUF si epidemiologie ou microbiologie est le sujet central
+  * Technologie non-scientifique
 
-IMPORTANT: Privilegier le contenu Quebec/Canada. La recherche internationale generale devrait etre FAIBLE sauf si directement applicable au Quebec.]
+IMPORTANT: Soyez STRICT. Un article qui mentionne "Quebec" ou "Canada" n'est PAS automatiquement pertinent. Le sujet DOIT toucher la biologie, l'ecologie, l'environnement naturel, ou la recherche scientifique. En cas de doute, choisissez AUCUN plutot que FAIBLE.]
 
 CATEGORIE D'IMPACT:
 [Un de: recherche | politique | opportunite | environnement | carriere]"""

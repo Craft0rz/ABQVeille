@@ -488,19 +488,41 @@ class RelevancyScorer:
 
             # Stricter filter for general category
             if article.category == "general":
-                # Check if article has relevant biology/environment/research keywords
+                # General articles must match biology, environment, or organization keywords
+                # Location-only (quebec, canada, montreal) and sector-only (gouvernement,
+                # financement, sante, education) matches are NOT sufficient — these match
+                # any Quebec news and let irrelevant articles through.
                 has_biology = bool(matched & self.ALL_BIOLOGY)
-                has_environment = bool(matched & self.ALL_ENVIRONMENT)
-                has_research = bool(matched & self.ALL_RESEARCH)
                 has_org = bool(matched & self.ALL_ORGANIZATIONS)
 
-                # General articles must have at least one core keyword match
-                if not (has_biology or has_environment or has_research or has_org):
+                # For environment, exclude generic terms that match non-science news
+                GENERIC_ENV_TERMS = {
+                    "environnement", "environment", "climat", "climate",
+                    "pollution", "sante", "health"
+                }
+                env_matches = matched & self.ALL_ENVIRONMENT
+                specific_env = env_matches - GENERIC_ENV_TERMS
+                # Require at least one specific environment keyword, or 2+ generic ones
+                # (single "environnement" from weather reports is not enough)
+                has_specific_environment = bool(specific_env) or len(env_matches) >= 2
+
+                # For research, exclude generic terms
+                GENERIC_RESEARCH_TERMS = {
+                    "etude", "study", "publication", "laboratoire", "laboratory",
+                    "financement", "funding", "bourse", "scholarship",
+                    "formation", "innovation", "experience"
+                }
+                research_matches = matched & self.ALL_RESEARCH
+                specific_research = research_matches - GENERIC_RESEARCH_TERMS
+                has_specific_research = bool(specific_research)
+
+                # General articles must have at least one strong signal
+                if not (has_biology or has_specific_environment or has_specific_research or has_org):
                     general_filtered += 1
                     continue
 
                 # General articles need higher score threshold
-                if article.relevancy_score < 0.05:
+                if article.relevancy_score < 0.15:
                     general_filtered += 1
                     continue
 
