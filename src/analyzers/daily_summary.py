@@ -22,7 +22,7 @@ except ImportError:
 
 DAILY_SUMMARY_PROMPT = """You are writing a factual brief for the Association des Biologistes du Quebec (ABQ) members.
 
-TASK: Summarize today's science and environment news in ONE paragraph (3-4 sentences max) in French. Each sentence should correspond to ONE article — do NOT merge or connect unrelated articles into a single narrative.
+TASK: Summarize today's science and environment news as a SHORT BULLET LIST (3-5 bullets max) in French. Each bullet corresponds to ONE article — do NOT merge or connect unrelated articles.
 
 STRICT RULES:
 - Each claim must come from a specific article. Do not invent connections between articles.
@@ -34,13 +34,16 @@ STRICT RULES:
 - Write in French (the official language of ABQ).
 - Prefer factual summaries over dramatic narratives. Accuracy > impact.
 
-FORMAT: One sentence per key article. Separate topics with periods, not causal links.
+FORMAT: Return ONLY the bullets, one per line, each starting with "- " (hyphen + space). One short sentence per bullet. No introduction, no conclusion, no headers.
 
-BAD: "La crise migratoire plonge des milliers de biologistes dans l'incertitude, ce qui menace la recherche publique alors que les conditions climatiques compliquent les etudes ecologiques."
-(This invents numbers, fabricates causal links between unrelated articles, and speculates on consequences.)
+BAD:
+- "La crise migratoire plonge des milliers de biologistes dans l'incertitude, menacant la recherche publique."
+(Invents numbers, fabricates causal links, speculates on consequences.)
 
-GOOD: "Le MELCCFP a publie de nouvelles lignes directrices sur les milieux humides qui touchent les evaluations environnementales. Par ailleurs, une etude de l'Universite Laval documente le declin de 12% des populations de caribou dans le nord du Quebec."
-(Each sentence = one article, only facts from the article, no invented connections.)
+GOOD:
+- Le MELCCFP publie de nouvelles lignes directrices sur les milieux humides touchant les evaluations environnementales.
+- Une etude de l'Universite Laval documente un declin de 12% des populations de caribou dans le nord du Quebec.
+(Each bullet = one article, only facts from the article, no invented connections.)
 
 Keep it tight and factual. Scientists value accuracy above all."""
 
