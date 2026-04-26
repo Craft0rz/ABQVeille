@@ -1,7 +1,7 @@
 """
 Email Compiler - Compiles DailyDigest into email-ready format.
 """
-from datetime import datetime
+from datetime import datetime, timedelta
 from typing import List, Dict, Optional
 from dataclasses import dataclass, field
 from loguru import logger
@@ -19,10 +19,40 @@ class CategorySection:
     display_name: str
     articles: List[ArticleModel] = field(default_factory=list)
 
+FR_MONTHS = {
+    1: "janvier", 2: "février", 3: "mars", 4: "avril", 5: "mai", 6: "juin",
+    7: "juillet", 8: "août", 9: "septembre", 10: "octobre", 11: "novembre", 12: "décembre",
+}
+FR_WEEKDAYS = {
+    0: "lundi", 1: "mardi", 2: "mercredi", 3: "jeudi",
+    4: "vendredi", 5: "samedi", 6: "dimanche",
+}
+
+
+def _format_fr(d: datetime) -> str:
+    return f"{d.day} {FR_MONTHS[d.month]} {d.year}"
+
+
+def build_date_label(date_str: str) -> str:
+    """Return display label. On Monday, show Fri-Sun range; otherwise single date."""
+    try:
+        d = datetime.strptime(date_str, "%Y-%m-%d")
+    except ValueError:
+        return date_str
+    if d.weekday() == 0:  # Monday
+        friday = d - timedelta(days=3)
+        sunday = d - timedelta(days=1)
+        if friday.month == sunday.month:
+            return f"Fin de semaine du {friday.day} au {sunday.day} {FR_MONTHS[sunday.month]} {sunday.year}"
+        return f"Fin de semaine du {friday.day} {FR_MONTHS[friday.month]} au {sunday.day} {FR_MONTHS[sunday.month]} {sunday.year}"
+    return _format_fr(d)
+
+
 @dataclass
 class EmailContext:
     """Complete context for email template rendering."""
     date: str
+    date_label: str
     subject: str
     logo_url: Optional[str] = None
     article_count: int = 0
@@ -107,6 +137,7 @@ class EmailCompiler:
         # Build context
         context = EmailContext(
             date=digest.date,
+            date_label=build_date_label(digest.date),
             subject=subject,
             article_count=digest.total_articles,
             source_count=len(sources),
