@@ -30,3 +30,14 @@ config/token.json
 config/token.pickle
 credentials/*.json
 !credentials/.gitkeep
+# ===== Cross-platform OS artifacts (added for Mac↔Windows workflow) =====
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.stackdump
