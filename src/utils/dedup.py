@@ -21,57 +21,59 @@ STOP_WORDS = {
     # English
     "the", "a", "an", "and", "or", "but", "in", "on", "at", "to", "for", "of",
     "is", "are", "was", "were", "be", "been", "has", "have", "had", "its",
-    "this", "that", "these", "those", "with", "from", "by", "as", "it"
+    "this", "that", "these", "those", "with", "from", "by", "as", "it",
+    # Generic high-frequency words that bloat Quebec/environment news
+    "quebec", "quebecois", "canada", "canadien", "canadienne", "ans",
+    "environnement", "environnemental", "environnementale", "ministere",
+    "gouvernement", "nouvelle", "nouvelles", "nouveau", "nouveaux", "nouvelle",
+    "nbsp", "amp", "x27", "etre", "fait", "faire", "tres", "deux", "trois",
+    "selon", "entre", "chez", "vers", "tous", "toutes", "tout", "toute",
+    "ici", "radio", "tva", "presse", "devoir", "journal",
 }
 
 
 class ContentDeduplicator:
     """Detects duplicate stories from different sources using title similarity"""
 
-    def __init__(self, similarity_threshold: float = 0.30):
+    def __init__(self, similarity_threshold: float = 0.25, min_shared_tokens: int = 4):
         """
         Initialize deduplicator.
 
         Args:
-            similarity_threshold: Minimum Jaccard similarity to consider duplicate (0.0-1.0)
+            similarity_threshold: Minimum Jaccard similarity to consider duplicate
+            min_shared_tokens: Minimum number of shared tokens (absolute overlap)
+                required in addition to the ratio threshold. Prevents short
+                token sets with generic words from collapsing into giant groups.
         """
         self.similarity_threshold = similarity_threshold
+        self.min_shared_tokens = min_shared_tokens
         self.duplicates_removed = 0
         self.duplicate_groups: List[List[ArticleModel]] = []
 
-    def _normalize_title(self, title: str) -> Set[str]:
-        """
-        Normalize title for comparison.
+    def _normalize_text(self, text: str, strip_source_suffix: bool = False) -> Set[str]:
+        """Normalize text into a set of comparable tokens."""
+        if not text:
+            return set()
 
-        - Strip source suffix (Google News adds "- SourceName")
-        - Lowercase
-        - Remove accents
-        - Remove punctuation
-        - Split into tokens
-        - Remove stop words
-        - Remove short tokens (< 3 chars)
-        """
-        # Strip source suffix (pattern: " - SourceName" at end)
-        # Google News appends source like "- TVA Nouvelles", "- Radio-Canada", etc.
-        text = re.sub(r'\s*[-–]\s*[A-Z][A-Za-z\s\-\.]*$', '', title)
+        # Strip source suffix (Google News appends "- SourceName")
+        if strip_source_suffix:
+            text = re.sub(r'\s*[-–]\s*[A-Z][A-Za-z\s\-\.]*$', '', text)
 
-        # Lowercase
+        # Lowercase, strip accents, strip punctuation
         text = text.lower()
-
-        # Remove accents
         text = unicodedata.normalize('NFD', text)
         text = ''.join(c for c in text if unicodedata.category(c) != 'Mn')
-
-        # Remove punctuation, keep only alphanumeric
+        text = re.sub(r'[<][^>]+[>]', ' ', text)  # strip any HTML tags
         text = re.sub(r'[^a-z0-9\s]', ' ', text)
 
-        # Split into tokens
-        tokens = text.split()
+        # Tokenize, drop stop words and short tokens
+        return {t for t in text.split() if t not in STOP_WORDS and len(t) >= 3}
 
-        # Remove stop words and short tokens
-        tokens = {t for t in tokens if t not in STOP_WORDS and len(t) >= 3}
-
-        return tokens
+    def _article_tokens(self, article: ArticleModel) -> Set[str]:
+        """Combine title + summary tokens for richer duplicate detection."""
+        title_tokens = self._normalize_text(article.title or "", strip_source_suffix=True)
+        summary_tokens = self._normalize_text(article.summary or "")
+        return title_tokens | summary_tokens
 
     def _jaccard_similarity(self, set1: Set[str], set2: Set[str]) -> float:
         """Calculate Jaccard similarity between two token sets"""
@@ -88,8 +90,8 @@ class ContentDeduplicator:
         Returns list of index groups where each group contains duplicate articles.
         """
         n = len(articles)
-        # Pre-compute normalized titles
-        normalized = [self._normalize_title(a.title) for a in articles]
+        # Pre-compute normalized token sets (title + summary)
+        normalized = [self._article_tokens(a) for a in articles]
 
         # Track which articles have been grouped
         grouped: Set[int] = set()
@@ -108,6 +110,9 @@ class ContentDeduplicator:
                 if j in grouped:
                     continue
 
+                shared = len(normalized[i] & normalized[j])
+                if shared < self.min_shared_tokens:
+                    continue
                 similarity = self._jaccard_similarity(normalized[i], normalized[j])
                 if similarity >= self.similarity_threshold:
                     group.append(j)
