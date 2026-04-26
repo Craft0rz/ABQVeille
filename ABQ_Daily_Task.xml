@@ -16,6 +16,15 @@ Collects news from 89 RSS feeds, analyzes with AI, and sends digest email to mfo
         <DaysInterval>1</DaysInterval>
       </ScheduleByDay>
     </CalendarTrigger>
+    <SessionStateChangeTrigger>
+      <Enabled>true</Enabled>
+      <StateChange>SessionUnlock</StateChange>
+      <Delay>PT1M</Delay>
+    </SessionStateChangeTrigger>
+    <LogonTrigger>
+      <Enabled>true</Enabled>
+      <Delay>PT2M</Delay>
+    </LogonTrigger>
   </Triggers>
   <Principals>
     <Principal id="Author">
@@ -44,8 +53,8 @@ Collects news from 89 RSS feeds, analyzes with AI, and sends digest email to mfo
   </Settings>
   <Actions Context="Author">
     <Exec>
-      <Command>c:\Users\mfont\projects\ABQ\run_daily_automated.bat</Command>
-      <WorkingDirectory>c:\Users\mfont\projects\ABQ</WorkingDirectory>
+      <Command>c:\Users\mfont\projects\ABQ-veille\run_daily_automated.bat</Command>
+      <WorkingDirectory>c:\Users\mfont\projects\ABQ-veille</WorkingDirectory>
     </Exec>
   </Actions>
 </Task>
