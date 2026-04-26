@@ -1,33 +1,23 @@
-<!-- Email Footer - ABQ Green & Blue palette -->
+<!-- Email Footer - ABQ website-matched branding -->
 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-    <!-- Green accent bar -->
+    <!-- Olive green accent bar -->
     <tr>
-        <td style="background-color: #8CC63F; height: 4px;"></td>
+        <td style="background-color: #6B8E23; height: 4px;"></td>
     </tr>
 
-    <!-- Footer content -->
+    <!-- Footer content - light background -->
     <tr>
-        <td style="background-color: #0072BC; padding: 25px 30px;">
+        <td style="background-color: #F7F9F4; padding: 25px 30px;">
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <!-- ABQ Info -->
                 <tr>
                     <td style="padding-bottom: 15px;">
-                        <p style="font-family: Arial, sans-serif; font-size: 13px; color: #ffffff; margin: 0 0 8px 0; font-weight: bold;">
-                            Association des Biologistes du Quebec (ABQ)
+                        <p style="font-family: Arial, sans-serif; font-size: 13px; color: #0072BC; margin: 0 0 8px 0; font-weight: bold;">
+                            Association des biologistes du Québec (ABQ)
                         </p>
-                        <p style="font-family: Arial, sans-serif; font-size: 11px; color: #A8D86B; margin: 0; line-height: 1.6;">
-                            CP 35 010 Montreal, Quebec H2C 3K4<br>
-                            Tel: 514 279-7115 | Courriel: info@abq.qc.ca
-                        </p>
-                    </td>
-                </tr>
-
-                <!-- About -->
-                <tr>
-                    <td style="padding-bottom: 15px;">
-                        <p style="font-family: Arial, sans-serif; font-size: 12px; color: #A8D86B; margin: 0; line-height: 1.5;">
-                            Ce bulletin est genere automatiquement par le systeme de veille scientifique
-                            de l'ABQ pour tenir nos membres informes des actualites pertinentes.
+                        <p style="font-family: Arial, sans-serif; font-size: 11px; color: #777777; margin: 0; line-height: 1.6;">
+                            CP 35 010 Montréal, Québec H2C 3K4<br>
+                            Tél. : 514 279-7115 | Courriel : info@abq.qc.ca
                         </p>
                     </td>
                 </tr>
@@ -38,17 +28,17 @@
                         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                             <tr>
                                 <td style="padding-right: 20px;">
-                                    <a href="https://www.abq.qc.ca" style="font-family: Arial, sans-serif; font-size: 11px; color: #ffffff; text-decoration: underline;">
+                                    <a href="https://www.abq.qc.ca" style="font-family: Arial, sans-serif; font-size: 11px; color: #0072BC; text-decoration: underline;">
                                         www.abq.qc.ca
                                     </a>
                                 </td>
                                 <td style="padding-right: 20px;">
-                                    <a href="https://www.abq.qc.ca/fr/devenir-membre" style="font-family: Arial, sans-serif; font-size: 11px; color: #ffffff; text-decoration: underline;">
+                                    <a href="https://www.abq.qc.ca/fr/devenir-membre" style="font-family: Arial, sans-serif; font-size: 11px; color: #0072BC; text-decoration: underline;">
                                         Devenir membre
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="https://www.abq.qc.ca/fr/nous-joindre" style="font-family: Arial, sans-serif; font-size: 11px; color: #ffffff; text-decoration: underline;">
+                                    <a href="https://www.abq.qc.ca/fr/nous-joindre" style="font-family: Arial, sans-serif; font-size: 11px; color: #0072BC; text-decoration: underline;">
                                         Nous joindre
                                     </a>
                                 </td>
@@ -60,11 +50,11 @@
                 <!-- Sources list -->
                 {% if sources %}
                 <tr>
-                    <td style="padding-top: 10px; border-top: 1px solid #8CC63F;">
-                        <p style="font-family: Arial, sans-serif; font-size: 10px; color: #A8D86B; margin: 10px 0 5px 0; font-weight: bold;">
-                            Sources ({{ sources | length }}):
+                    <td style="padding-top: 10px; border-top: 1px solid #D4DFC8;">
+                        <p style="font-family: Arial, sans-serif; font-size: 10px; color: #888888; margin: 10px 0 5px 0; font-weight: bold;">
+                            Sources ({{ sources | length }}) :
                         </p>
-                        <p style="font-family: Arial, sans-serif; font-size: 10px; color: #A8D86B; margin: 0; line-height: 1.6;">
+                        <p style="font-family: Arial, sans-serif; font-size: 10px; color: #999999; margin: 0; line-height: 1.6;">
                             {{ sources | join(' | ') }}
                         </p>
                     </td>
@@ -74,8 +64,8 @@
                 <!-- Generation info -->
                 <tr>
                     <td style="padding-top: 15px;">
-                        <p style="font-family: Arial, sans-serif; font-size: 10px; color: #A8D86B; margin: 0;">
-                            Genere le {{ generated_at | format_date('%d %B %Y a %H:%M') }}
+                        <p style="font-family: Arial, sans-serif; font-size: 10px; color: #999999; margin: 0;">
+                            Généré le {{ generated_at | format_date('%d %B %Y à %H:%M') }}
                         </p>
                     </td>
                 </tr>

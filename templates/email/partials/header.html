@@ -1,34 +1,31 @@
-<!-- Email Header with ABQ branding - Green & Blue palette -->
+<!-- Email Header - ABQ website-matched branding -->
 <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
-    <!-- Logo and Title Row -->
+    <!-- White header with logo and title -->
     <tr>
-        <td style="background-color: #0072BC; padding: 20px 30px;">
+        <td style="background-color: #ffffff; padding: 24px 30px 20px 30px;">
             <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                     <!-- ABQ Logo -->
-                    <td valign="middle" style="width: 120px; padding-right: 20px;">
+                    <td valign="middle" style="width: 80px; padding-right: 16px;">
                         <img src="https://media.licdn.com/dms/image/v2/D4E0BAQHkXAAel_lrjQ/company-logo_200_200/company-logo_200_200/0/1734446383039/association_des_biologistes_du_qubec_logo?e=2147483647&v=beta&t=GzxlG5Dvk1nVVHVoRzUKaDDGrtds8aznjSCi6g4LkHI"
                              alt="ABQ"
-                             width="100"
-                             height="100"
-                             style="display: block; border-radius: 8px; border: 3px solid #ffffff;">
+                             width="64"
+                             height="64"
+                             style="display: block; border-radius: 8px;">
                     </td>
                     <!-- ABQ Name -->
                     <td valign="middle">
-                        <h1 style="font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; color: #ffffff; margin: 0; padding: 0;">
-                            Association des Biologistes du Québec
+                        <h1 style="font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; color: #0072BC; margin: 0; padding: 0;">
+                            Association des biologistes du Québec
                         </h1>
-                        <p style="font-family: Arial, sans-serif; font-size: 12px; color: #A8D86B; margin: 5px 0 0 0;">
-                            Depuis 1974 - Plus de 1000 membres
+                        <p style="font-family: Arial, sans-serif; font-size: 12px; color: #777777; margin: 4px 0 0 0;">
+                            Plus de 1000 membres depuis 1974
                         </p>
                     </td>
-                    <!-- Title and date -->
+                    <!-- Date -->
                     <td valign="middle" align="right">
-                        <h2 style="font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; color: #ffffff; margin: 0; padding: 0;">
-                            Veille Scientifique
-                        </h2>
-                        <p style="font-family: Arial, sans-serif; font-size: 13px; color: #A8D86B; margin: 5px 0 0 0;">
-                            {{ date | format_date('%d %B %Y') }}
+                        <p style="font-family: Arial, sans-serif; font-size: 13px; color: #777777; margin: 0;">
+                            {{ date_label }}
                         </p>
                     </td>
                 </tr>
@@ -36,8 +33,30 @@
         </td>
     </tr>
 
-    <!-- Green accent bar -->
+    <!-- Olive green accent bar -->
     <tr>
-        <td style="background-color: #8CC63F; height: 6px;"></td>
+        <td style="background-color: #6B8E23; height: 4px;"></td>
+    </tr>
+
+    <!-- Veille Scientifique title band -->
+    <tr>
+        <td style="background-color: #F7F9F4; padding: 16px 30px;">
+            <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                    <td>
+                        <h2 style="font-family: Arial, sans-serif; font-size: 22px; font-weight: bold; color: #0072BC; margin: 0; padding: 0;">
+                            Veille scientifique
+                        </h2>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding-top: 8px;">
+                        <p style="font-family: Arial, sans-serif; font-size: 11px; color: #888888; margin: 0; line-height: 1.5; font-style: italic;">
+                            Ce bulletin est généré automatiquement par le système de veille scientifique de l'ABQ pour tenir nos membres informés des actualités pertinentes. Les résumés et analyses sont produits par intelligence artificielle à partir des sources citées.
+                        </p>
+                    </td>
+                </tr>
+            </table>
+        </td>
     </tr>
 </table>
