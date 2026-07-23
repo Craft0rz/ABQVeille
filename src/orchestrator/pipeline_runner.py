@@ -367,6 +367,32 @@ class PipelineRunner:
         except Exception as e:
             logger.exception(f"Failed to send operator alert: {e}")
 
+    def _ping_healthcheck(self, endpoint: str = "") -> None:
+        """Ping the external dead-man's-switch (healthchecks.io or compatible).
+
+        This is the ONLY thing that can catch the pipeline not running at all
+        (machine off, scheduled task disabled, crash before analysis): if the
+        external service stops receiving pings, IT alerts the operator.
+
+        endpoint: "" = success, "start" = run began, "fail" = run failed.
+        Best-effort and never raises. Skipped in dry-run/skip-email mode.
+        """
+        url = config.monitoring.healthcheck_url
+        if not url:
+            return
+        if self.skip_email:
+            logger.debug(f"dry-run/skip-email: skipping healthcheck ping ({endpoint or 'success'})")
+            return
+
+        ping_url = url.rstrip("/") + (f"/{endpoint}" if endpoint else "")
+        try:
+            import requests
+            requests.get(ping_url, timeout=10)
+            logger.debug(f"Healthcheck pinged: {endpoint or 'success'}")
+        except Exception as e:
+            # A failed heartbeat ping must never break the run.
+            logger.warning(f"Healthcheck ping failed ({endpoint or 'success'}): {e}")
+
     def run(self) -> int:
         """
         Run the complete pipeline.
@@ -390,6 +416,9 @@ class PipelineRunner:
             # Acquire lock
             self._acquire_lock()
 
+            # Signal the external dead-man's-switch that a run has started.
+            self._ping_healthcheck("start")
+
             # Stage 0: Feed Health Check (non-blocking)
             self._stage_health_check()
 
@@ -400,6 +429,7 @@ class PipelineRunner:
 
             if count == 0:
                 logger.warning("No articles to process, exiting early")
+                self._ping_healthcheck()  # ran to completion, just nothing to process
                 self.state.mark_complete(success=True, exit_code=0)
                 return 0
 
@@ -431,10 +461,12 @@ class PipelineRunner:
                         ),
                     )
                     self.state.error_message = "AI analysis outage (all articles failed)"
+                    self._ping_healthcheck("fail")  # ran, but failed - external switch shows red
                     self.state.mark_complete(success=False, exit_code=1)
                     return 1
 
                 logger.warning("No relevant articles found (genuine slow day), skipping email")
+                self._ping_healthcheck()  # ran fine, genuinely nothing to send
                 self.state.mark_complete(success=True, exit_code=0)
                 return 0
 
@@ -463,6 +495,7 @@ class PipelineRunner:
                 )
 
             # Complete
+            self._ping_healthcheck()  # success heartbeat for the external switch
             self.state.mark_complete(success=True, exit_code=0)
             logger.success(f"Pipeline completed successfully in {self.state.get_duration():.1f}s")
 
@@ -477,6 +510,7 @@ class PipelineRunner:
         except Exception as e:
             logger.exception(f"Pipeline failed: {e}")
             self.state.error_message = str(e)
+            self._ping_healthcheck("fail")  # crashed - external switch shows red
             self.state.mark_complete(success=False, exit_code=1)
             return 1
 

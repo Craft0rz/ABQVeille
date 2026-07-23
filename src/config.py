@@ -84,11 +84,20 @@ class AIConfig(BaseModel):
     temperature: float = 0.3
 
 
+class MonitoringConfig(BaseModel):
+    """External monitoring / dead-man's-switch configuration."""
+    # healthchecks.io (or compatible) ping URL. The pipeline pings it on every
+    # run so an external service alerts if the pipeline stops running entirely
+    # (machine off, task disabled, crash before analysis). Empty = disabled.
+    healthcheck_url: str = Field(default_factory=lambda: os.getenv("HEALTHCHECK_URL", ""))
+
+
 class Config(BaseModel):
     """Main configuration"""
     email: EmailConfig = Field(default_factory=EmailConfig)
     analysis: AnalysisConfig = Field(default_factory=AnalysisConfig)
     ai: AIConfig = Field(default_factory=AIConfig)
+    monitoring: MonitoringConfig = Field(default_factory=MonitoringConfig)
     feeds: List[RSSFeed] = Field(default_factory=list)
 
     @classmethod
