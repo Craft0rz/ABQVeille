@@ -75,7 +75,7 @@ class AnalysisConfig(BaseModel):
 class AIConfig(BaseModel):
     """AI analysis configuration"""
     enabled: bool = Field(default_factory=lambda: bool(os.getenv("ANTHROPIC_API_KEY")))
-    model: str = "claude-sonnet-4-20250514"
+    model: str = "claude-sonnet-5"
     max_articles_to_analyze: int = 50  # Increased for better coverage
     test_max_articles: int = 5
     temperature: float = 0.3

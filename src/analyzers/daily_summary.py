@@ -115,7 +115,7 @@ class DailySummaryGenerator:
             response = self.client.messages.create(
                 model=self.model,
                 max_tokens=300,
-                temperature=0.2,  # Low for factual accuracy
+                thinking={"type": "disabled"},  # Sonnet 5 defaults thinking ON; disable to keep the small max_tokens for output
                 messages=[
                     {
                         "role": "user",

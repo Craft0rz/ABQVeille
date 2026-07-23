@@ -165,7 +165,7 @@ class AIAnalyst:
             response = self.client.messages.create(
                 model=self.model,
                 max_tokens=500,
-                temperature=self.temperature,
+                thinking={"type": "disabled"},  # Sonnet 5 defaults thinking ON; disable to keep the small max_tokens for output
                 messages=[
                     {
                         "role": "user",
