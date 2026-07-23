@@ -38,6 +38,9 @@ class EmailConfig(BaseModel):
     sender_name: str = Field(default_factory=lambda: os.getenv("SENDER_NAME", "ABQ Veille Scientifique"))
     recipient_emails: List[str] = Field(default_factory=list)
     subject_prefix: str = "[ABQ Veille]"
+    # Operator alert address for pipeline-health notices (AI outages, degradation).
+    # NOT the member list. Falls back to the sender address.
+    alert_email: str = Field(default_factory=lambda: os.getenv("ALERT_EMAIL", "") or os.getenv("SENDER_EMAIL", ""))
 
 
 class AnalysisConfig(BaseModel):

@@ -70,6 +70,10 @@ class PipelineRunner:
         # State
         self.state = ExecutionState(date_str=self.date_str, started_at=datetime.now())
 
+        # AI analysis stats from the analysis stage (used for outage detection).
+        # {analyzed, failed, skipped, filtered_low_impact}
+        self.ai_stats: dict = {}
+
     def _acquire_lock(self) -> bool:
         """Acquire execution lock to prevent concurrent runs."""
         if self.force:
@@ -215,6 +219,11 @@ class PipelineRunner:
             )
             digest = pipeline.process_daily(self.date_str)
 
+            # Capture AI stats so run() can tell an outage (all articles errored)
+            # apart from a genuine slow news day (nothing relevant).
+            if pipeline.ai_analyst:
+                self.ai_stats = pipeline.ai_analyst.get_stats()
+
             if not digest:
                 logger.warning("No digest generated from analysis")
                 self.state.complete_stage(stage, success=True, items=0)
@@ -322,6 +331,42 @@ class PipelineRunner:
             self.state.complete_stage(stage, success=False, error=str(e))
             return False, {'error': str(e)}
 
+    def _send_operator_alert(self, subject: str, body: str) -> None:
+        """Send an operational health alert to the operator (NOT the member list).
+
+        Used so an AI outage or degradation can never again produce a silent
+        no-send. No-op (log only) in dry-run/skip-email mode, or when the alert
+        address / Gmail credentials are unavailable.
+        """
+        logger.critical(f"OPERATOR ALERT: {subject}")
+
+        if self.skip_email:
+            logger.info("dry-run/skip-email mode: not sending operator alert email")
+            return
+
+        alert_to = config.email.alert_email
+        if not alert_to:
+            logger.error("No ALERT_EMAIL/SENDER_EMAIL configured - cannot send operator alert")
+            return
+        if not gmail_auth.has_client_secrets():
+            logger.error("Gmail not configured - cannot send operator alert")
+            return
+
+        try:
+            html = "<pre style=\"font-family:sans-serif;white-space:pre-wrap\">" + body + "</pre>"
+            result = gmail_sender.send(
+                to=alert_to,
+                subject=f"{config.email.subject_prefix} ALERTE - {subject}",
+                html_content=html,
+                from_name=config.email.sender_name,
+            )
+            if result.success:
+                logger.info(f"Operator alert sent to {alert_to}")
+            else:
+                logger.error(f"Operator alert send failed: {result.error}")
+        except Exception as e:
+            logger.exception(f"Failed to send operator alert: {e}")
+
     def run(self) -> int:
         """
         Run the complete pipeline.
@@ -364,7 +409,32 @@ class PipelineRunner:
                 raise RuntimeError("Analysis stage failed")
 
             if count == 0:
-                logger.warning("No relevant articles found, skipping email")
+                ai = self.ai_stats or {}
+                # Distinguish an AI outage from a genuine slow news day.
+                # Outage: articles reached the model but every one errored
+                # (e.g. retired model ID -> 404). A slow day has failed == 0.
+                if ai.get("failed", 0) > 0 and ai.get("analyzed", 0) == 0:
+                    logger.critical(
+                        f"AI analysis outage: {ai.get('failed')} articles failed, "
+                        f"0 analyzed - no digest could be built for {self.date_str}"
+                    )
+                    self._send_operator_alert(
+                        subject=f"Aucun digest envoye pour {self.date_str} - panne IA",
+                        body=(
+                            f"Le pipeline ABQ Veille du {self.date_str} n'a produit AUCUN "
+                            f"article pertinent parce que l'analyse IA a echoue sur tous les "
+                            f"articles ({ai.get('failed')} echecs, 0 analyses).\n\n"
+                            f"C'est presque toujours un probleme de modele/API Claude "
+                            f"(ex: identifiant de modele retire -> 404).\n"
+                            f"Verifier logs/errors_{self.date_str}.log pour l'erreur exacte.\n\n"
+                            f"AUCUN courriel n'a ete envoye a la liste de diffusion."
+                        ),
+                    )
+                    self.state.error_message = "AI analysis outage (all articles failed)"
+                    self.state.mark_complete(success=False, exit_code=1)
+                    return 1
+
+                logger.warning("No relevant articles found (genuine slow day), skipping email")
                 self.state.mark_complete(success=True, exit_code=0)
                 return 0
 
@@ -377,6 +447,20 @@ class PipelineRunner:
             success, report = self._stage_email_send(html)
             if not success:
                 raise RuntimeError("Email send stage failed")
+
+            # Non-blocking heads-up: digest went out, but AI failed on some
+            # articles (partial degradation worth knowing about).
+            ai = self.ai_stats or {}
+            if ai.get("failed", 0) > 0:
+                logger.warning(f"AI analysis had {ai['failed']} failure(s) this run: {ai}")
+                self._send_operator_alert(
+                    subject=f"Analyse IA degradee pour {self.date_str} (digest envoye quand meme)",
+                    body=(
+                        f"Le digest du {self.date_str} a ete envoye, mais l'analyse IA a "
+                        f"echoue sur {ai['failed']} article(s) (stats: {ai}).\n"
+                        f"Verifier logs/errors_{self.date_str}.log."
+                    ),
+                )
 
             # Complete
             self.state.mark_complete(success=True, exit_code=0)
