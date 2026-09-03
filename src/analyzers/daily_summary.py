@@ -24,6 +24,8 @@ DAILY_SUMMARY_PROMPT = """You are writing a factual brief for the Association de
 
 TASK: Summarize today's science and environment news as a SHORT BULLET LIST (3-5 bullets max) in French. Each bullet corresponds to ONE article — do NOT merge or connect unrelated articles.
 
+SELECTION: the articles below are pre-ranked, most important first (impact level, then relevancy). Cover the TOP stories, in that order. Leaving the lower-ranked articles out is expected and correct - never drop a top story to make room for a minor one.
+
 STRICT RULES:
 - Each claim must come from a specific article. Do not invent connections between articles.
 - Report ONLY facts stated in the articles. Never extrapolate, speculate, or infer consequences not mentioned.
@@ -34,7 +36,9 @@ STRICT RULES:
 - Write in French (the official language of ABQ).
 - Prefer factual summaries over dramatic narratives. Accuracy > impact.
 
-FORMAT: Return ONLY the bullets, one per line, each starting with "- " (hyphen + space). One short sentence per bullet. No introduction, no conclusion, no headers.
+FORMAT: Return ONLY the bullets, one per line, each starting with "- " (hyphen + space). No introduction, no conclusion, no headers.
+
+LENGTH (strict): each bullet is ONE sentence of 200 characters maximum. Do NOT chain several facts with semicolons or "et" - keep the single most important fact of the article and drop the rest. A short complete bullet is always better than a long one.
 
 BAD:
 - "La crise migratoire plonge des milliers de biologistes dans l'incertitude, menacant la recherche publique."
@@ -50,6 +54,9 @@ Keep it tight and factual. Scientists value accuracy above all."""
 
 class DailySummaryGenerator:
     """Generates executive daily summary from analyzed articles"""
+
+    # Ordering used to decide which stories earn one of the few bullets.
+    IMPACT_RANK = {"eleve": 0, "moyen": 1, "faible": 2}
 
     def __init__(self, model: Optional[str] = None):
         """
@@ -67,6 +74,34 @@ class DailySummaryGenerator:
             logger.info(f"DailySummaryGenerator initialized with model: {self.model}")
         else:
             self.client = None
+
+    @staticmethod
+    def _drop_incomplete_bullets(summary: str) -> str:
+        """
+        Drop trailing bullets that were cut off mid-sentence.
+
+        The model is capped by max_tokens, so the last bullet can end mid-word.
+        Members read this section first - a dangling fragment reads as a bug.
+        Better to send one bullet fewer than one broken one.
+
+        Args:
+            summary: Raw summary text, one bullet per line
+
+        Returns:
+            Summary with incomplete trailing bullets removed (original text if
+            that would leave nothing to send)
+        """
+        lines = [line for line in summary.strip().splitlines() if line.strip()]
+
+        while lines and not lines[-1].rstrip().endswith((".", "!", "?", "…", '"', ")")):
+            dropped = lines.pop()
+            logger.warning(f"Dropped truncated bullet: ...{dropped.strip()[-60:]}")
+
+        if not lines:
+            logger.error("All bullets looked truncated - sending summary as-is")
+            return summary.strip()
+
+        return "\n".join(lines)
 
     def generate(self, articles: List[ArticleModel], date_str: str) -> Optional[str]:
         """
@@ -87,11 +122,24 @@ class DailySummaryGenerator:
             logger.warning("No articles to summarize")
             return None
 
+        # The rest of the email ranks by relevancy; the summary must too, or the
+        # bullets that survive the 3-5 cap are just whatever arrived first.
+        ranked = sorted(
+            articles,
+            key=lambda a: (
+                self.IMPACT_RANK.get(a.impact_level, len(self.IMPACT_RANK)),
+                -(a.relevancy_score or 0.0),
+            ),
+        )
+
         # Build article summaries for the prompt
         article_summaries = []
-        for i, article in enumerate(articles, 1):
+        for i, article in enumerate(ranked, 1):
             parts = [f"{i}. {article.title}"]
             parts.append(f"   Source: {article.source_name} | Category: {article.category}")
+
+            if article.impact_level:
+                parts.append(f"   Impact Level: {article.impact_level}")
 
             if article.language:
                 parts.append(f"   Language: {article.language}")
@@ -114,8 +162,8 @@ class DailySummaryGenerator:
         try:
             response = self.client.messages.create(
                 model=self.model,
-                max_tokens=300,
-                thinking={"type": "disabled"},  # Sonnet 5 defaults thinking ON; disable to keep the small max_tokens for output
+                max_tokens=1200,  # 300 truncated 2 of 3 summaries mid-sentence after the Sonnet 5 migration
+                thinking={"type": "disabled"},  # Sonnet 5 defaults thinking ON; disable to keep max_tokens for output
                 messages=[
                     {
                         "role": "user",
@@ -125,6 +173,14 @@ class DailySummaryGenerator:
             )
 
             summary = response.content[0].text
+
+            if response.stop_reason == "max_tokens":
+                logger.warning(
+                    f"Daily summary hit max_tokens ({len(summary)} chars) - "
+                    "trailing bullet is incomplete, consider raising the budget"
+                )
+
+            summary = self._drop_incomplete_bullets(summary)
             logger.info(f"Generated daily summary: {len(summary)} chars")
             return summary
 

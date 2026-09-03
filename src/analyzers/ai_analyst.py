@@ -164,8 +164,8 @@ class AIAnalyst:
         try:
             response = self.client.messages.create(
                 model=self.model,
-                max_tokens=500,
-                thinking={"type": "disabled"},  # Sonnet 5 defaults thinking ON; disable to keep the small max_tokens for output
+                max_tokens=900,  # 500 cut off NIVEAU D'IMPACT on long analyses, silently dropping the article
+                thinking={"type": "disabled"},  # Sonnet 5 defaults thinking ON; disable to keep max_tokens for output
                 messages=[
                     {
                         "role": "user",
@@ -176,6 +176,15 @@ class AIAnalyst:
 
             # Parse response
             result = response.content[0].text
+
+            if response.stop_reason == "max_tokens":
+                # A cut-off response loses NIVEAU D'IMPACT, so the article is
+                # silently filtered out of the digest. Make that visible.
+                logger.warning(
+                    f"Analysis hit max_tokens for '{article.title[:50]}...' - "
+                    "impact level may be missing"
+                )
+
             parsed = self._parse_analysis(result)
 
             article.ai_summary = parsed.get("summary")
