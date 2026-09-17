@@ -67,6 +67,13 @@ if %EXIT_CODE% equ 0 (
     echo %date% %time% > "%MARKER%"
     REM Clean up old markers (keep last 7 days)
     forfiles /p "%PROJECT_DIR%\logs" /m ".last_success_*" /d -7 /c "cmd /c del @path" 2>nul
+
+    REM Report days that never got a digest. On a Monday this surfaces the
+    REM Friday and Saturday skipped by the weekend guard above.
+    REM Report-only: backfilling sends a real email, so it stays manual.
+    REM Recover with: python run_backfill.py --run
+    echo --- Missed-day check --- >> "%LOGFILE%"
+    python run_backfill.py >> "%LOGFILE%" 2>&1
 )
 
 REM Deactivate virtual environment
