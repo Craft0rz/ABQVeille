@@ -169,10 +169,43 @@ class AIAnalyst:
                 messages=[
                     {
                         "role": "user",
-                        "content": f"{ARTICLE_ANALYSIS_PROMPT}\n\n---\n\nARTICLE TO ANALYZE:\n\n{article_text}"
+                        # Same text as before, split at a block boundary so the
+                        # shared prefix can be cached. This prompt is 1,857
+                        # tokens and goes out once per article, so it was being
+                        # re-read at full price on every article of every run.
+                        # Caching is a prefix match: the prompt must come first
+                        # and the article after the breakpoint, which is how it
+                        # was already ordered.
+                        #
+                        # 1,857 tokens clear the 1,024-token minimum for
+                        # sonnet-5. The minimum is not monotonic across models
+                        # (Haiku 4.5 needs 4,096), so re-check it if this ever
+                        # moves model - it fails silently, not loudly.
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": f"{ARTICLE_ANALYSIS_PROMPT}\n\n---\n\nARTICLE TO ANALYZE:\n\n",
+                                "cache_control": {"type": "ephemeral"},
+                            },
+                            {"type": "text", "text": article_text},
+                        ],
                     }
                 ]
             )
+
+            # Caching fails silently - no error, just full price every time -
+            # and the usual cause is a later edit putting something variable
+            # ahead of the breakpoint. These counters are the only ground truth
+            # that it still works. Expect a write on the first article of a run
+            # and reads on the rest; reads at zero across a run means it broke.
+            u = getattr(response, "usage", None)
+            if u is not None:
+                self.stats["cache_read_tokens"] = self.stats.get("cache_read_tokens", 0) + (
+                    getattr(u, "cache_read_input_tokens", 0) or 0
+                )
+                self.stats["cache_write_tokens"] = self.stats.get("cache_write_tokens", 0) + (
+                    getattr(u, "cache_creation_input_tokens", 0) or 0
+                )
 
             # Parse response
             result = response.content[0].text
