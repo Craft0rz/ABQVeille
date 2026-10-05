@@ -14,18 +14,26 @@ REM Skip on weekends (Saturday=6, Sunday=0)
 for /f %%i in ('powershell -NoProfile -Command "[int](Get-Date).DayOfWeek"') do set DOW=%%i
 if "%DOW%"=="0" (
     echo %date% %time% - Sunday, skipping >> "%PROJECT_DIR%\logs\skipped.log"
+    REM Weekend heartbeat: UptimeRobot is interval-based and would page every
+    REM Saturday otherwise. Proves the machine and the task are alive.
+    "%PROJECT_DIR%\.venv\Scripts\python.exe" scripts\heartbeat.py "Sunday - digest skipped by design" >> "%PROJECT_DIR%\logs\skipped.log" 2>&1
     exit /b 0
 )
 if "%DOW%"=="6" (
     echo %date% %time% - Saturday, skipping >> "%PROJECT_DIR%\logs\skipped.log"
+    REM Weekend heartbeat: UptimeRobot is interval-based and would page every
+    REM Saturday otherwise. Proves the machine and the task are alive.
+    "%PROJECT_DIR%\.venv\Scripts\python.exe" scripts\heartbeat.py "Saturday - digest skipped by design" >> "%PROJECT_DIR%\logs\skipped.log" 2>&1
     exit /b 0
 )
 
 REM Create logs directory if it doesn't exist
 if not exist "%PROJECT_DIR%\logs" mkdir "%PROJECT_DIR%\logs"
 
-REM Build today's marker file path (YYYY-MM-DD format)
-set TODAY=%date:~-4,4%-%date:~-10,2%-%date:~-7,2%
+REM Build today's marker file path (YYYY-MM-DD format). Locale-independent:
+REM slicing %date% assumed US mm/dd/yyyy; on this machine (yyyy-mm-dd) it
+REM produced names like ".last_success_0-05-20-6-".
+for /f %%i in ('powershell -NoProfile -Command "Get-Date -Format yyyy-MM-dd"') do set TODAY=%%i
 set MARKER=%PROJECT_DIR%\logs\.last_success_%TODAY%
 
 REM Skip if already ran successfully today
@@ -35,7 +43,7 @@ if exist "%MARKER%" (
 )
 
 REM Set log file with timestamp
-set LOGFILE=%PROJECT_DIR%\logs\automated_run_%date:~-4,4%%date:~-10,2%%date:~-7,2%.log
+set LOGFILE=%PROJECT_DIR%\logs\automated_run_%TODAY%.log
 
 echo ============================================= >> "%LOGFILE%"
 echo ABQ Daily Intelligence - Automated Run >> "%LOGFILE%"
@@ -74,6 +82,13 @@ if %EXIT_CODE% equ 0 (
     REM Recover with: python run_backfill.py --run
     echo --- Missed-day check --- >> "%LOGFILE%"
     python run_backfill.py >> "%LOGFILE%" 2>&1
+
+    REM Weekly publisher audit (Mondays): emails ALERT_EMAIL only when a
+    REM content-farm-looking publisher needs a decision. Never the member list.
+    if "%DOW%"=="1" (
+        echo --- Publisher audit --- >> "%LOGFILE%"
+        python scriptsudit_publishers.py --email >> "%LOGFILE%" 2>&1
+    )
 )
 
 REM Deactivate virtual environment

@@ -16,6 +16,10 @@ from ABQ.src.config import CREDENTIALS_DIR
 SCOPES = ['https://www.googleapis.com/auth/gmail.send']
 
 
+class GmailAuthError(RuntimeError):
+    """Credentials need a person: unattended runs fail fast instead of hanging."""
+
+
 class GmailAuthManager:
     """Manages Gmail OAuth 2.0 authentication."""
 
@@ -55,12 +59,18 @@ class GmailAuthManager:
         except Exception:
             return False
 
-    def authenticate(self, force_refresh: bool = False) -> bool:
+    def authenticate(self, force_refresh: bool = False, interactive: bool = False) -> bool:
         """
         Authenticate with Gmail API.
 
         Args:
             force_refresh: Force re-authentication
+            interactive: Allow the browser consent flow. Only setup scripts run
+                by a person pass True. The scheduled run must not: with no one
+                at the keyboard, run_local_server() waits forever for a login
+                that never comes. From 2026-09-18 a rotated OAuth client secret
+                left ABQ Veille hung at exactly that call every weekday morning
+                - no email, no exit, no alert, sixteen stuck processes.
 
         Returns:
             True if authentication successful
@@ -96,6 +106,14 @@ class GmailAuthManager:
                     creds = None
 
             if not creds:
+                if not interactive:
+                    raise GmailAuthError(
+                        "Gmail token is invalid and cannot be refreshed, and this run is "
+                        "unattended, so no browser login was attempted. Usual cause: the "
+                        "OAuth client secret was rotated (credentials/client_secrets.json "
+                        "and the client_secret inside credentials/gmail_token.json). "
+                        "Re-authorise with: python scripts/setup_gmail.py"
+                    )
                 # Run OAuth flow
                 flow = InstalledAppFlow.from_client_secrets_file(
                     str(self.client_secrets_path), SCOPES

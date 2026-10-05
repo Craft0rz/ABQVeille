@@ -17,7 +17,13 @@ from ABQ.src.analyzers.relevancy_scorer import RelevancyScorer
 from ABQ.src.analyzers.ai_analyst import AIAnalyst
 from ABQ.src.analyzers.daily_summary import DailySummaryGenerator
 from ABQ.src.utils.dedup import ContentDeduplicator
-from ABQ.src.config import config
+from ABQ.src.config import config, CONFIG_DIR
+from ABQ.src.reporting.publisher_audit import blocked_publishers, publisher_from_title
+
+# Publishers dropped before scoring, decided through scripts/audit_publishers.py
+# (weekly audit flags, a human blocks). Google News items name the outlet in the
+# title suffix; a direct feed is the outlet, so its feed name is used instead.
+PUBLISHER_REGISTER = CONFIG_DIR / "publisher_review.json"
 
 
 class AnalysisPipeline:
@@ -92,6 +98,9 @@ class AnalysisPipeline:
 
         logger.info(f"Filtered to {len(articles)} articles from {date_str}")
 
+        # Stage 1b2: Drop publishers blocked in the review register
+        articles = self._filter_blocked_publishers(articles)
+
         # Stage 1c: Deduplicate similar stories from different sources
         articles = self.deduplicator.deduplicate(articles)
         logger.info(f"After deduplication: {len(articles)} unique articles, {self.deduplicator.get_stats()}")
@@ -143,6 +152,22 @@ class AnalysisPipeline:
         logger.info(f"Pipeline complete: {len(relevant)} relevant articles from {len(articles)} total")
 
         return digest
+
+    @staticmethod
+    def _publisher(article) -> str:
+        if "news.google.com" in f"{article.url or ''}{article.source_url or ''}":
+            return publisher_from_title(article.title).lower()
+        return (article.source_name or "").lower()
+
+    @staticmethod
+    def _filter_blocked_publishers(articles: list) -> list:
+        blocked = blocked_publishers(PUBLISHER_REGISTER)
+        if not blocked:
+            return articles
+        kept = [a for a in articles if AnalysisPipeline._publisher(a) not in blocked]
+        if len(kept) < len(articles):
+            logger.info(f"Publisher filter: dropped {len(articles) - len(kept)} blocked-publisher articles")
+        return kept
 
     def _filter_by_date(self, articles: list, date_str: str) -> list:
         """

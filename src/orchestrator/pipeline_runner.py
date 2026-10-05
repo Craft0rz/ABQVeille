@@ -367,7 +367,7 @@ class PipelineRunner:
         except Exception as e:
             logger.exception(f"Failed to send operator alert: {e}")
 
-    def _ping_healthcheck(self, endpoint: str = "") -> None:
+    def _ping_healthcheck(self, endpoint: str = "", message: str = "") -> None:
         """Ping the external dead-man's-switch (healthchecks.io or compatible).
 
         This is the ONLY thing that can catch the pipeline not running at all
@@ -375,23 +375,14 @@ class PipelineRunner:
         external service stops receiving pings, IT alerts the operator.
 
         endpoint: "" = success, "start" = run began, "fail" = run failed.
+        `message` is posted as the ping body so the alert email says why.
         Best-effort and never raises. Skipped in dry-run/skip-email mode.
         """
-        url = config.monitoring.healthcheck_url
-        if not url:
-            return
         if self.skip_email:
             logger.debug(f"dry-run/skip-email: skipping healthcheck ping ({endpoint or 'success'})")
             return
-
-        ping_url = url.rstrip("/") + (f"/{endpoint}" if endpoint else "")
-        try:
-            import requests
-            requests.get(ping_url, timeout=10)
-            logger.debug(f"Healthcheck pinged: {endpoint or 'success'}")
-        except Exception as e:
-            # A failed heartbeat ping must never break the run.
-            logger.warning(f"Healthcheck ping failed ({endpoint or 'success'}): {e}")
+        from ABQ.src.utils.heartbeat import ping
+        ping(config.monitoring.healthcheck_url, endpoint, message)
 
     def run(self) -> int:
         """
@@ -461,7 +452,7 @@ class PipelineRunner:
                         ),
                     )
                     self.state.error_message = "AI analysis outage (all articles failed)"
-                    self._ping_healthcheck("fail")  # ran, but failed - external switch shows red
+                    self._ping_healthcheck("fail", f"{self.date_str}: AI analysis outage, no digest sent")
                     self.state.mark_complete(success=False, exit_code=1)
                     return 1
 
@@ -494,8 +485,20 @@ class PipelineRunner:
                     ),
                 )
 
+            # Green only when members actually got it. _stage_email_send reports
+            # success when Gmail is not configured or every send failed, so its
+            # return value cannot be the signal.
+            sent = getattr(self.state, "emails_sent", 0) or 0
+            if sent > 0:
+                self._ping_healthcheck("", f"{self.date_str}: digest sent to {sent} recipients")
+            elif not self.skip_email:
+                self._ping_healthcheck(
+                    "fail",
+                    f"{self.date_str}: digest built but 0 emails sent - check Gmail "
+                    f"credentials and logs/daily_{self.date_str}.log",
+                )
+
             # Complete
-            self._ping_healthcheck()  # success heartbeat for the external switch
             self.state.mark_complete(success=True, exit_code=0)
             logger.success(f"Pipeline completed successfully in {self.state.get_duration():.1f}s")
 
@@ -510,7 +513,8 @@ class PipelineRunner:
         except Exception as e:
             logger.exception(f"Pipeline failed: {e}")
             self.state.error_message = str(e)
-            self._ping_healthcheck("fail")  # crashed - external switch shows red
+            # crashed - external switch shows red, with the reason
+            self._ping_healthcheck("fail", f"{self.date_str}: pipeline failed - {e}")
             self.state.mark_complete(success=False, exit_code=1)
             return 1
 
