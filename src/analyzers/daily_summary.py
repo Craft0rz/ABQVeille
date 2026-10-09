@@ -163,7 +163,11 @@ class DailySummaryGenerator:
             response = self.client.messages.create(
                 model=self.model,
                 max_tokens=1200,  # 300 truncated 2 of 3 summaries mid-sentence after the Sonnet 5 migration
-                thinking={"type": "disabled"},  # Sonnet 5 defaults thinking ON; disable to keep max_tokens for output
+                # Sonnet 5.5 rejects {"type": "disabled"} (400). With no tools,
+                # between_tools means no thinking at all, so max_tokens stays
+                # entirely for the bullets. SDK 0.76 has no output_config kwarg.
+                thinking={"type": "between_tools"},
+                extra_body={"output_config": {"effort": "medium"}},
                 messages=[
                     {
                         "role": "user",
@@ -172,7 +176,17 @@ class DailySummaryGenerator:
                 ]
             )
 
-            summary = response.content[0].text
+            if response.stop_reason == "refusal":
+                logger.error(
+                    f"Daily summary refused by {self.model} "
+                    f"(stop_details={getattr(response, 'stop_details', None)})"
+                )
+                return None
+
+            summary = "".join(b.text for b in response.content if b.type == "text")
+            if not summary.strip():
+                logger.error(f"Daily summary from {self.model} had no text block")
+                return None
 
             if response.stop_reason == "max_tokens":
                 logger.warning(

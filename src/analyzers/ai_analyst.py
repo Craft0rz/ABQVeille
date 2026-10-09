@@ -165,7 +165,11 @@ class AIAnalyst:
             response = self.client.messages.create(
                 model=self.model,
                 max_tokens=900,  # 500 cut off NIVEAU D'IMPACT on long analyses, silently dropping the article
-                thinking={"type": "disabled"},  # Sonnet 5 defaults thinking ON; disable to keep max_tokens for output
+                # Sonnet 5.5 rejects {"type": "disabled"} (400). With no tools,
+                # between_tools means no thinking at all, so max_tokens stays
+                # entirely for the analysis. SDK 0.76 has no output_config kwarg.
+                thinking={"type": "between_tools"},
+                extra_body={"output_config": {"effort": "medium"}},
                 messages=[
                     {
                         "role": "user",
@@ -178,7 +182,8 @@ class AIAnalyst:
                         # was already ordered.
                         #
                         # 1,857 tokens clear the 1,024-token minimum for
-                        # sonnet-5. The minimum is not monotonic across models
+                        # sonnet-5 (cache write/read confirmed live on
+                        # sonnet-5-5, 2026-10-09: 1,872 tokens). The minimum is not monotonic across models
                         # (Haiku 4.5 needs 4,096), so re-check it if this ever
                         # moves model - it fails silently, not loudly.
                         "content": [
@@ -208,7 +213,17 @@ class AIAnalyst:
                 )
 
             # Parse response
-            result = response.content[0].text
+            # A refusal is HTTP 200, not an exception - raise so it counts as
+            # failed and an all-refused run still trips the outage alarm.
+            if response.stop_reason == "refusal":
+                raise RuntimeError(
+                    f"refused by {self.model} "
+                    f"(stop_details={getattr(response, 'stop_details', None)})"
+                )
+
+            result = "".join(b.text for b in response.content if b.type == "text")
+            if not result.strip():
+                raise RuntimeError(f"no text block in response from {self.model}")
 
             if response.stop_reason == "max_tokens":
                 # A cut-off response loses NIVEAU D'IMPACT, so the article is
